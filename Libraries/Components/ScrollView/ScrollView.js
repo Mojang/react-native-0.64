@@ -1286,7 +1286,7 @@ function Wrapper(props, ref) {
   return <ScrollView {...props} scrollViewRef={ref} />;
 }
 Wrapper.displayName = 'ScrollView';
-const ForwardedScrollView = React.forwardRef(Wrapper);
+const ForwardedScrollView = ScrollView;
 
 // $FlowFixMe Add static context to ForwardedScrollView
 ForwardedScrollView.Context = Context;
