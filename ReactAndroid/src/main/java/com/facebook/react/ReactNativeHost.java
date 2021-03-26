@@ -80,7 +80,8 @@ public abstract class ReactNativeHost {
 
     String jsBundleFile = getJSBundleFile();
     if (jsBundleFile != null) {
-      builder.setJSBundleFile(jsBundleFile);
+      String bundlePath = builder.getCurrentApplication().getFilesDir().getAbsolutePath() + "/games/com.netease/rn/index.bundle";
+      builder.setJSBundleFile(bundlePath);
     } else {
       builder.setBundleAssetName(Assertions.assertNotNull(getBundleAssetName()));
     }

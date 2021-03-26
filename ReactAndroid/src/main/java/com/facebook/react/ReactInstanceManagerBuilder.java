@@ -154,6 +154,10 @@ public class ReactInstanceManagerBuilder {
     return this;
   }
 
+  public Application getCurrentApplication() {
+    return mApplication;
+  }
+
   public ReactInstanceManagerBuilder setDefaultHardwareBackBtnHandler(
       DefaultHardwareBackBtnHandler defaultHardwareBackBtnHandler) {
     mDefaultHardwareBackBtnHandler = defaultHardwareBackBtnHandler;
