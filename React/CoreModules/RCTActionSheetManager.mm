@@ -31,7 +31,7 @@ using namespace facebook::react;
 
 RCT_EXPORT_MODULE()
 
-@synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
+@synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue
 {
@@ -46,7 +46,7 @@ RCT_EXPORT_MODULE()
   UIView *sourceView = parentViewController.view;
 
   if (anchorViewTag) {
-    sourceView = [self.viewRegistry_DEPRECATED viewForReactTag:anchorViewTag];
+    sourceView = [self.bridge.uiManager viewForReactTag:anchorViewTag];
   } else {
     alertController.popoverPresentationController.permittedArrowDirections = 0;
   }
@@ -96,17 +96,16 @@ RCT_EXPORT_METHOD(showActionSheetWithOptions
   UIColor *tintColor = [RCTConvert UIColor:options.tintColor() ? @(*options.tintColor()) : nil];
 
   if (controller == nil) {
-    RCTLogError(
-        @"Tried to display action sheet but there is no application window. options: %@", @{
-          @"title" : title,
-          @"message" : message,
-          @"options" : buttons,
-          @"cancelButtonIndex" : @(cancelButtonIndex),
-          @"destructiveButtonIndices" : destructiveButtonIndices,
-          @"anchor" : anchor,
-          @"tintColor" : tintColor,
-          @"disabledButtonIndices" : disabledButtonIndices,
-        });
+    RCTLogError(@"Tried to display action sheet but there is no application window. options: %@", @{
+      @"title" : title,
+      @"message" : message,
+      @"options" : buttons,
+      @"cancelButtonIndex" : @(cancelButtonIndex),
+      @"destructiveButtonIndices" : destructiveButtonIndices,
+      @"anchor" : anchor,
+      @"tintColor" : tintColor,
+      @"disabledButtonIndices" : disabledButtonIndices,
+    });
     return;
   }
 
@@ -145,10 +144,7 @@ RCT_EXPORT_METHOD(showActionSheetWithOptions
       if ([disabledButtonIndex integerValue] < buttons.count) {
         [alertController.actions[[disabledButtonIndex integerValue]] setEnabled:false];
       } else {
-        RCTLogError(
-            @"Index %@ from `disabledButtonIndices` is out of bounds. Maximum index value is %@.",
-            @([disabledButtonIndex integerValue]),
-            @(buttons.count - 1));
+        RCTLogError(@"Index %@ from `disabledButtonIndices` is out of bounds. Maximum index value is %@.", @([disabledButtonIndex integerValue]), @(buttons.count - 1));
         return;
       }
     }

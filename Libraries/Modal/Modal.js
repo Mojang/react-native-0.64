@@ -8,6 +8,8 @@
  * @flow strict-local
  */
 
+'use strict';
+
 const AppContainer = require('../ReactNative/AppContainer');
 const I18nManager = require('../ReactNative/I18nManager');
 import NativeEventEmitter from '../EventEmitter/NativeEventEmitter';
@@ -27,13 +29,9 @@ import type {DirectEventHandler} from '../Types/CodegenTypes';
 import {type EventSubscription} from '../vendor/emitter/EventEmitter';
 import RCTModalHostView from './RCTModalHostViewNativeComponent';
 
-type ModalEventDefinitions = {
-  modalDismissed: [{modalID: number}],
-};
-
 const ModalEventEmitter =
   Platform.OS === 'ios' && NativeModalManager != null
-    ? new NativeEventEmitter<ModalEventDefinitions>(NativeModalManager)
+    ? new NativeEventEmitter(NativeModalManager)
     : null;
 
 /**
