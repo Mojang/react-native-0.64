@@ -63,7 +63,6 @@ class FastImage extends React.Component {
     }
 
     render() {
-        console.log('zzzzzzzzz fast 1111111', disableFastImage)
         const {
             source,
             onLoadStart,
