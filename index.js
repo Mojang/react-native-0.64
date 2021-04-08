@@ -146,7 +146,7 @@ module.exports = {
     return require('./Libraries/Lists/FlatList');
   },
   get Image(): Image {
-    return require('./Libraries/Image/Image');
+    return require('./MC/Image');
   },
   get ImageBackground(): ImageBackground {
     return require('./Libraries/Image/ImageBackground');

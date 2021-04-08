@@ -12,7 +12,7 @@
 
 import * as React from 'react';
 
-const Image = require('../../../Image/Image');
+const Image = require('../../../../MC/Image');
 const createAnimatedComponent = require('../createAnimatedComponent');
 
 import type {AnimatedComponentType} from '../createAnimatedComponent';

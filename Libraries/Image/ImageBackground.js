@@ -10,7 +10,7 @@
 
 'use strict';
 
-const Image = require('./Image');
+const Image = require('../../MC/Image');
 const React = require('react');
 const StyleSheet = require('../StyleSheet/StyleSheet');
 const View = require('../Components/View/View');
