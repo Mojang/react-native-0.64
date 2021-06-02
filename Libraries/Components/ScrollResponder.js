@@ -467,7 +467,7 @@ const ScrollResponderMixin = {
    * the function also accepts separate arguments as as alternative to the options object.
    * This is deprecated due to ambiguity (y before x), and SHOULD NOT BE USED.
    */
-  scrollResponderScrollTo: function(
+   scrollResponderScrollTo: function(
     x?:
       | number
       | {
@@ -486,17 +486,12 @@ const ScrollResponderMixin = {
     } else {
       ({x, y, animated} = x || {});
     }
-
-    const that: React.ElementRef<ScrollView> = (this: any);
-    invariant(
-      that.getNativeScrollRef != null,
-      'Expected scrollTo to be called on a scrollViewRef. If this exception occurs it is likely a bug in React Native',
+    const nullthrows = require('nullthrows');
+    UIManager.dispatchViewManagerCommand(
+      nullthrows(this.scrollResponderGetScrollableNode()),
+      UIManager.RCTScrollView.Commands.scrollTo,
+      [x || 0, y || 0, animated !== false],
     );
-    const nativeScrollRef = that.getNativeScrollRef();
-    if (nativeScrollRef == null) {
-      return;
-    }
-    Commands.scrollTo(nativeScrollRef, x || 0, y || 0, animated !== false);
   },
 
   /**
