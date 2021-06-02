@@ -666,6 +666,9 @@ type ScrollViewComponentStatics = $ReadOnly<{|
  */
 class ScrollView extends React.Component<Props, State> {
   static Context: React$Context<ContextType> = Context;
+  static defaultProps = {
+    scrollIndicatorInsets: { right: 1 },
+  };
   /**
    * Part 1: Removing ScrollResponder.Mixin:
    *
