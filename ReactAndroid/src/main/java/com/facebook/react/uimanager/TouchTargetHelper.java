@@ -94,8 +94,15 @@ public class TouchTargetHelper {
   }
 
   private static View findClosestReactAncestor(View view) {
+    Object viewTmp = view;
     while (view != null && view.getId() <= 0) {
-      view = (View) view.getParent();
+      viewTmp = view.getParent();
+      // FOR: PM #62463 [pe][dump]android.view.ViewRootImpl cannot be cast to android.view.View
+      if(viewTmp instanceof View) {
+        view = (View)viewTmp;
+      } else {
+        break;
+      }
     }
     return view;
   }
