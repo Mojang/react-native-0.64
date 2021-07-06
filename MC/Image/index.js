@@ -14,24 +14,6 @@ var resolveAssetSource = require('../../Libraries/Image/resolveAssetSource');
 const FastImageViewNativeModule = NativeModules.FastImageView
 let disableFastImage = false
 
-const useLocalImage = source => {
-    // No source.
-    if (disableFastImage || !source) return true
-    // No uri.
-    if (!source.uri) return true
-    // Is a local Android image.
-    if (source.uri.startsWith('file://')) return true
-    // Content URI.
-    if (source.uri.startsWith('content://')) return true
-    // Smart album.
-    if (source.uri.startsWith('photos://')) return true
-    // From asset library / camera roll.
-    if (source.uri.startsWith('assets-library://')) return true
-    // We have a remote source.
-    if (!source.uri.startsWith('http')) return true
-    return false
-}
-
 class FastImage extends React.Component {
     constructor (props) {
       super()
@@ -77,7 +59,7 @@ class FastImage extends React.Component {
         } = this.props
 
         // If there's no source or source uri just fallback to Image.
-        if (useLocalImage(source)) {
+        if (disableFastImage) {
             return (
                 <Image
                     ref={this.captureRef}
