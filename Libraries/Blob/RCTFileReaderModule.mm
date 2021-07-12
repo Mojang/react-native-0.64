@@ -39,10 +39,11 @@ RCT_EXPORT_METHOD(readAsText:(NSDictionary<NSString *, id> *)blob
   } else {
     NSStringEncoding stringEncoding;
 
-    if (encoding == nil) {
-      stringEncoding = NSUTF8StringEncoding;
+    NSString *encodingName = [RCTConvert NSString:blob[@"encoding"]];
+    if (!encodingName || [encodingName isKindOfClass:[NSNull class]] || !encodingName.length) {
+        stringEncoding = NSUTF8StringEncoding;
     } else {
-      stringEncoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef) encoding));
+        stringEncoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef) encodingName));
     }
 
     NSString *text = [[NSString alloc] initWithData:data encoding:stringEncoding];
