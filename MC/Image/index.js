@@ -10,9 +10,33 @@ const NativeModules = require('../../Libraries/BatchedBridge/NativeModules');
 const requireNativeComponent = require('../../Libraries/ReactNative/requireNativeComponent');
 var PropTypes = require('prop-types');
 var resolveAssetSource = require('../../Libraries/Image/resolveAssetSource');
+const Platform = require('../../Libraries/Utilities/Platform');
 
 const FastImageViewNativeModule = NativeModules.FastImageView
 let disableFastImage = false
+
+const useLocalImage = source => {
+  if (Platform.OS === 'android') {
+    // 安卓全部使用glide容易触发闪退
+    return true
+  }
+  // No source.
+  if (disableFastImage) return true
+  // No uri.
+  if (!isLocalImage(source)) {
+    if (!source.uri || !source.uri.startsWith('http')) {
+      return true
+    }
+  }
+  return false
+}
+
+const isLocalImage = source => {
+  if (typeof source === 'object') {
+    return false
+  }
+  return true
+}
 
 class FastImage extends React.Component {
     constructor (props) {
@@ -59,7 +83,7 @@ class FastImage extends React.Component {
         } = this.props
 
         // If there's no source or source uri just fallback to Image.
-        if (disableFastImage) {
+        if (useLocalImage(source)) {
             return (
                 <Image
                     ref={this.captureRef}
@@ -76,16 +100,16 @@ class FastImage extends React.Component {
         }
 
         const resolvedSource = resolveAssetSource(source)
-        if (this.state.loadError) {
+        if (!resolvedSource || this.state.loadError) {
           return (
-            <View style={[style, styles.imageContainer, { backgroundColor: '#e2e4e8' }]} ref={this.captureRef}>
+            <View style={[style, styles.imageContainer, !isLocalImage(source) && { backgroundColor: '#e2e4e8' }]} ref={this.captureRef}>
               <Image style={styles.errorImg} resizeMode="contain" source={defaultImg || require('./img01.png')} />
             </View>
           )
         }
 
         return (
-            <View style={[style, styles.imageContainer, !this.state.loaded ? { backgroundColor: '#e2e4e8' } : null]} ref={this.captureRef}>
+            <View style={[style, styles.imageContainer, !isLocalImage(source) && !this.state.loaded ? { backgroundColor: '#e2e4e8' } : null]} ref={this.captureRef}>
                 <FastImageView
                     {...props}
                     style={StyleSheet.absoluteFill}
@@ -171,15 +195,15 @@ const FinalImage = FastImage
 /**
  * 需要补充Image中的静态方法
  */
- const { getSize, getSizeWithHeaders, prefetch, abortPrefetch, queryCache } = Image
- FinalImage.getSize = getSize;
- FinalImage.getSizeWithHeaders = getSizeWithHeaders;
- FinalImage.prefetch = prefetch;
- FinalImage.abortPrefetch = abortPrefetch;
- FinalImage.queryCache = queryCache;
- FinalImage.resolveAssetSource = resolveAssetSource;
- FinalImage.disableFastImage = (b) => {
+const { getSize, getSizeWithHeaders, prefetch, abortPrefetch, queryCache } = Image
+FinalImage.getSize = getSize;
+FinalImage.getSizeWithHeaders = getSizeWithHeaders;
+FinalImage.prefetch = prefetch;
+FinalImage.abortPrefetch = abortPrefetch;
+FinalImage.queryCache = queryCache;
+FinalImage.resolveAssetSource = resolveAssetSource;
+FinalImage.disableFastImage = (b) => {
   disableFastImage = b
- };
+};
 
 module.exports = FinalImage
