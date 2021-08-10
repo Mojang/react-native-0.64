@@ -15,9 +15,12 @@ const Platform = require('../../Libraries/Utilities/Platform');
 const FastImageViewNativeModule = NativeModules.FastImageView
 let disableFastImage = false
 
-const useLocalImage = source => {
+const useLocalImage = (source, style) => {
   if (Platform.OS === 'android') {
     // 安卓全部使用glide容易触发闪退
+    return true
+  }
+  if (style.tintColor) {
     return true
   }
   // No source.
@@ -83,7 +86,7 @@ class FastImage extends React.Component {
         } = this.props
 
         // If there's no source or source uri just fallback to Image.
-        if (useLocalImage(source)) {
+        if (useLocalImage(source, style)) {
             return (
                 <Image
                     ref={this.captureRef}
@@ -167,7 +170,6 @@ const FastImageSourcePropType = PropTypes.shape({
 })
 
 FastImage.propTypes = {
-    ...ViewPropTypes,
     source: PropTypes.oneOfType([FastImageSourcePropType, PropTypes.number]),
     onLoadStart: PropTypes.func,
     onProgress: PropTypes.func,
