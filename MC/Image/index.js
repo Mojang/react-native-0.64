@@ -20,7 +20,7 @@ const useLocalImage = (source, style) => {
     // 安卓全部使用glide容易触发闪退
     return true
   }
-  if (style.tintColor) {
+  if (style && style.tintColor) {
     return true
   }
   // No source.
